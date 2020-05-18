@@ -2,12 +2,12 @@ require 'csv'
 
 desc "clear db and seed db"
 task seed: :environment do
+  InvoiceItem.destroy_all
   Invoice.destroy_all
   Transaction.destroy_all
   Item.destroy_all
   Customer.destroy_all
   Merchant.destroy_all
-  InvoiceItem.destroy_all
 
   ActiveRecord::Base.connection.tables.each do |t|
     ActiveRecord::Base.connection.reset_pk_sequence!(t)
@@ -30,17 +30,6 @@ task seed: :environment do
                      updated_at: row[:updated_at])
   end
 
-  csv_text = File.read(Rails.root.join('lib', 'seeds', 'invoice_items.csv'))
-  csv = CSV.parse(csv_text, headers: true, encoding: 'ISO-8859-1', header_converters: :symbol)
-  csv.each do |row|
-    InvoiceItem.create!(name: row[:name],
-                        description: row[:description],
-                        unit_price: row[:unit_price].to_i / 100.0,
-                        merchant_id: row[:merchant_id],
-                        created_at: row[:created_at],
-                        updated_at: row[:updated_at])
-  end
-
   csv_text = File.read(Rails.root.join('lib', 'seeds', 'invoices.csv'))
   csv = CSV.parse(csv_text, headers: true, encoding: 'ISO-8859-1', header_converters: :symbol)
   csv.each do |row|
@@ -60,6 +49,18 @@ task seed: :environment do
                  created_at: row[:created_at],
                  updated_at: row[:updated_at])
   end
+
+  csv_text = File.read(Rails.root.join('lib', 'seeds', 'invoice_items.csv'))
+  csv = CSV.parse(csv_text, headers: true, encoding: 'ISO-8859-1', header_converters: :symbol)
+  csv.each do |row|
+    InvoiceItem.create!(unit_price: row[:unit_price].to_i / 100.0,
+                        quantity: row[:quantity].to_i,
+                        item_id: row[:item_id],
+                        invoice_id: row[:invoice_id],
+                        created_at: row[:created_at],
+                        updated_at: row[:updated_at])
+  end
+
   csv_text = File.read(Rails.root.join('lib', 'seeds', 'transactions.csv'))
   csv = CSV.parse(csv_text, headers: true, encoding: 'ISO-8859-1', header_converters: :symbol)
   csv.each do |row|
