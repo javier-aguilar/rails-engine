@@ -24,6 +24,7 @@ gem 'puma', '~> 3.7'
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
+gem 'fast_jsonapi'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -31,12 +32,13 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.5'
   gem 'capybara'
   gem 'database_cleaner'
-  gem 'factory_bot_rails'
   gem 'pry-rails'
 end
 
 group :test do
   gem 'simplecov'
+  gem 'factory_bot_rails'
+  gem 'faker'
 end
 
 group :development do
