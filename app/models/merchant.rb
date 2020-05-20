@@ -5,8 +5,38 @@ class Merchant < ApplicationRecord
 
   has_many :items, dependent: :destroy
   has_many :invoices, dependent: :destroy
+  has_many :invoice_items, through: :invoices
+  has_many :transactions, through: :invoices
 
   scope :filter_by_name, ->(name) { where('name ILIKE ?', "%#{name}%") }
   scope :filter_by_updated_at, ->(updated_at) { where updated_at: updated_at }
   scope :filter_by_created_at, ->(created_at) { where unit_price: created_at }
+
+  def self.most_revenue(limit)
+    select('merchants.*,
+           SUM(invoice_items.quantity * invoice_items.unit_price)
+           AS rev')
+      .joins(:invoice_items, :transactions)
+      .merge(Transaction.successful)
+      .group(:id)
+      .order('rev DESC')
+      .limit(limit)
+  end
+
+  def self.most_items(limit)
+    select('merchants.*, SUM(invoice_items.quantity) AS item_count')
+      .joins(:invoice_items, :transactions)
+      .merge(Transaction.successful)
+      .group(:id)
+      .order('item_count DESC')
+      .limit(limit)
+  end
+
+  def self.revenue_by_merchant(merchant)
+    joins(:invoice_items, :transactions)
+      .merge(Transaction.successful)
+      .where('invoices.merchant_id = ?', merchant)
+      .group(:id)
+      .pluck('SUM(invoice_items.quantity * invoice_items.unit_price) AS rev')
+  end
 end
