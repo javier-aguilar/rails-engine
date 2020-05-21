@@ -1,7 +1,7 @@
 class Api::V1::RevenueController < ApplicationController
   def index
-    value = Invoice.revenue_by_dates(date_params)
-    render json: RevenueSerializer.new(Revenue.new(value.first))
+    revenue = Invoice.revenue_by_dates(date_params)
+    render json: RevenueSerializer.new(Revenue.new(revenue.first))
   end
 
   private
