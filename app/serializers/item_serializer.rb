@@ -6,5 +6,6 @@ class ItemSerializer
              :unit_price,
              :merchant_id,
              :updated_at,
-             :created_at
+             :created_at,
+             :merchant
 end
