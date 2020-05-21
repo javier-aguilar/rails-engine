@@ -1,4 +1,4 @@
-## Rails Engine
+# Rails Engine
 This application exposes data that is to be used by a front-end application called [Rails Driver](https://github.com/turingschool-examples/rails_driver). Built with Rails 5.1.7 and Ruby 2.5.3
 
 To run locally:
