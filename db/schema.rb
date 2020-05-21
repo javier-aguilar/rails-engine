@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200516231358) do
+ActiveRecord::Schema.define(version: 20200518021943) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,13 +23,14 @@ ActiveRecord::Schema.define(version: 20200516231358) do
   end
 
   create_table "invoice_items", force: :cascade do |t|
-    t.string "name"
-    t.string "description"
     t.float "unit_price"
-    t.bigint "merchant_id"
+    t.integer "quantity"
+    t.bigint "item_id"
+    t.bigint "invoice_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["merchant_id"], name: "index_invoice_items_on_merchant_id"
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+    t.index ["item_id"], name: "index_invoice_items_on_item_id"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -68,7 +69,8 @@ ActiveRecord::Schema.define(version: 20200516231358) do
     t.index ["invoice_id"], name: "index_transactions_on_invoice_id"
   end
 
-  add_foreign_key "invoice_items", "merchants"
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoice_items", "items"
   add_foreign_key "invoices", "customers"
   add_foreign_key "invoices", "merchants"
   add_foreign_key "items", "merchants"

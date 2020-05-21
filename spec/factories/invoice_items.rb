@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :invoice_item do
-    name { "MyString" }
-    description { "MyString" }
-    unit_price { 1.5 }
-    merchant_id { nil }
+    unit_price { Faker::Number.decimal(l_digits: 2) }
+    quantity { 1 }
+    item
+    invoice
   end
 end
