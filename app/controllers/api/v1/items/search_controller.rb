@@ -1,12 +1,12 @@
 class Api::V1::Items::SearchController < ApplicationController
   def index
-    @items = Item.filter(search_params)
-    render json: ItemSerializer.new(@items)
+    items = Item.filter(search_params)
+    render json: ItemSerializer.new(items)
   end
 
   def show
-    @items = Item.filter(search_params)
-    render json: ItemSerializer.new(@items.first)
+    items = Item.filter(search_params)
+    render json: ItemSerializer.new(items.first)
   end
 
   private
